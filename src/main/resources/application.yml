@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nba_stats_db # Corrected URL
+    username: nbaplayer_user
+    password: lucky
+  jpa:
+    hibernate:
+      ddl-auto: update # create or update schema automatically
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

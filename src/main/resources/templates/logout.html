@@ -1,0 +1,15 @@
+<!-- how to handle log out-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Logout</title>
+  <script>
+    // Clear token and redirect
+    localStorage.removeItem('jwtToken');
+    window.location.href = '/logout'; // Triggers Spring Security logout
+  </script>
+</head>
+<body>
+Logging out...
+</body>
+</html>

@@ -29,4 +29,7 @@ The test player subheading gives the count of the nba players in the database.
 
 The mock player subheading gives you a chance to test a random player.
 
+For players who were traded in the midde of the year the team name is "2TM". Also to type in the team names use uppercase and the name that appears on the team scoreboard.
+For example: LAL is for lakers, GSW is for warriors, etc.
+
 Thank you and have fun :)

@@ -1,5 +1,7 @@
 Hi everyone my name is Vatsal and I am an avid NBA fan so I wanted to create an nba stats database.
 
+https://nba-statsdb.onrender.com is the website name.
+
 This is a 2024-2025 regular season National Basketball Association stats database. 
 
 When you click on the the website it gives you two options: click to see a secured greeting and achance to visit the login page directly.

@@ -36,3 +36,21 @@ build/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Java
+*.class
+*.jar
+*.war
+*.iml
+
+# IDE
+/.idea/
+/*.ipr
+/*.iws
+
+# Maven
+/target/
+/.settings/
+
+# OS
+.DS_Store

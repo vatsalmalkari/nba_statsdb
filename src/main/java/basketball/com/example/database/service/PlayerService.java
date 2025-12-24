@@ -1,46 +1,46 @@
 package basketball.com.example.database.service;
-
 import basketball.com.example.database.exception.PlayerNotFoundException;
 import basketball.com.example.database.model.Player;
 import basketball.com.example.database.repository.PlayerRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
 import java.util.List;
-//Controller → Service → Repository → Database
+
 @Service
 public class PlayerService {
-    // Uses PlayerRepository for database operations
+
     private final PlayerRepository playerRepository;
-    // Constructor injection
+
     public PlayerService(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
     }
 
-    // Get all players
+    //Basic Fetch Methods
     public List<Player> getAllPlayers() {
         return playerRepository.findAll();
     }
 
-    // Get by team
-    public List<Player> getPlayersByTeam(String team) {
-        return playerRepository.findByTeam(team);
-    }
-
-    // Get by position
     public List<Player> getPlayersByPosition(String position) {
         return playerRepository.findByPosition(position);
     }
 
-    // Get by age
     public List<Player> getPlayersByAge(Integer age) {
         return playerRepository.findByAge(age);
     }
 
+    public List<Player> getPlayersByFgPercentage(Double fgPercentage) {
+        return playerRepository.findByFgPercentage(fgPercentage);
+    }
 
+    public List<Player> getPlayersByFtPercentage(Double ftPercentage) {
+        return playerRepository.findByFtPercentage(ftPercentage);
+    }
 
-    public List<Player> getPlayersByAssist(Double assist) {
-        return playerRepository.findByAssistsPerGame(assist);
+    public List<Player> getPlayersByTurnovers(Double turnovers) {
+        return playerRepository.findByTurnovers(turnovers);
+    }
+
+    public List<Player> getPlayersByAssist(Double assists) {
+        return playerRepository.findByAssistsPerGame(assists);
     }
 
     public List<Player> getPlayersBySteals(Double steals) {
@@ -66,17 +66,20 @@ public class PlayerService {
     public List<Player> getPlayersByBlocks(Double blocks) {
         return playerRepository.findByBlocksPerGame(blocks);
     }
+
     public List<Player> getPlayersByPerRating(Double perRating) {
         return playerRepository.findByPerRating(perRating);
     }
+
     public List<Player> getPlayersByWinShares(Double winShares) {
         return playerRepository.findByWinShares(winShares);
     }
 
-    public List<Player> getPlayersByMinutesPerGame(Double minutesPerGame) {
-        return playerRepository.findByMinutesPerGame(minutesPerGame);
+    public List<Player> getPlayersByMinutesPerGame(Double mpg) {
+        return playerRepository.findByMinutesPerGame(mpg);
     }
 
+    // Range Queries
     public List<Player> getPlayersByPointsRange(Double min, Double max) {
         return playerRepository.findByPointsPerGameBetween(min, max);
     }
@@ -109,42 +112,59 @@ public class PlayerService {
         return playerRepository.findByTurnoversBetween(min, max);
     }
 
+    // CRUD
     public Player getPlayerById(Integer id) {
         return playerRepository.findById(id)
-                .orElseThrow(() -> new PlayerNotFoundException("Player not found with id " + id));
+                .orElseThrow(() -> new PlayerNotFoundException("Player not found with id: " + id));
     }
-
 
     public Player createPlayer(Player player) {
         return playerRepository.save(player);
     }
-    // 1. Find existing player
-    // 2. Update all fields
-    public Player updatePlayer(Integer id, Player updatedPlayer) {
-        Player existingPlayer = playerRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Player not found with id " + id));
-
-        // Update fields
-        existingPlayer.setPlayerName(updatedPlayer.setPlayerName);
-        existingPlayer.setTeam(updatedPlayer.getTeam());
-        existingPlayer.setPosition(updatedPlayer.getPosition());
-        existingPlayer.setAge(updatedPlayer.getAge());
-        existingPlayer.setGamesPlayed(updatedPlayer.getGames_played());
-        existingPlayer.setPointsPerGame(updatedPlayer.getPoints_per_game());
-        existingPlayer.setReboundsPerGame(updatedPlayer.getRebounds_per_game());
-        existingPlayer.setAssistsPerGame(updatedPlayer.getAssists_per_game());
-        existingPlayer.setStealsPerGame(updatedPlayer.getSteals_per_game());
-        existingPlayer.setBlocksPerGame(updatedPlayer.getBlocks_per_game());
-        existingPlayer.setWinShares(updatedPlayer.getWin_shares());
-        existingPlayer.setMinutesPerGame(updatedPlayer.getMinutes_per_game());
-        existingPlayer.setPerRating(updatedPlayer.getPer_rating());
-        existingPlayer.setGamesStarted(updatedPlayer.getGames_started());
-        existingPlayer.setFgPercentage(updatedPlayer.getFg_percentage());
-        existingPlayer.setFtPercentage(updatedPlayer.getFt_percentage());
-        existingPlayer.setTurnovers(updatedPlayer.getTurnovers());
-
-        return playerRepository.save(existingPlayer);
+    public List<Player> getPlayersByName(String name) {
+        return playerRepository.findByPlayerName(name);
     }
 
+    public List<Player> getPlayersByTeam(String team) {
+        return playerRepository.findByTeam(team);
+    }
 
+    
+
+    public Player updatePlayer(Integer id, Player updatedPlayer) {
+        Player existing = playerRepository.findById(id)
+                .orElseThrow(() -> new PlayerNotFoundException("Player not found with id: " + id));
+
+        existing.setPlayerName(updatedPlayer.getPlayerName());
+        existing.setTeam(updatedPlayer.getTeam());
+        existing.setPosition(updatedPlayer.getPosition());
+        existing.setAge(updatedPlayer.getAge());
+        existing.setGamesPlayed(updatedPlayer.getGamesPlayed());
+        existing.setGamesStarted(updatedPlayer.getGamesStarted());
+        existing.setPointsPerGame(updatedPlayer.getPointsPerGame());
+        existing.setReboundsPerGame(updatedPlayer.getReboundsPerGame());
+        existing.setAssistsPerGame(updatedPlayer.getAssistsPerGame());
+        existing.setStealsPerGame(updatedPlayer.getStealsPerGame());
+        existing.setBlocksPerGame(updatedPlayer.getBlocksPerGame());
+        existing.setFgPercentage(updatedPlayer.getFgPercentage());
+        existing.setFtPercentage(updatedPlayer.getFtPercentage());
+        existing.setTurnovers(updatedPlayer.getTurnovers());
+        existing.setMinutesPerGame(updatedPlayer.getMinutesPerGame());
+        existing.setPerRating(updatedPlayer.getPerRating());
+        existing.setWinShares(updatedPlayer.getWinShares());
+        existing.setThreePointPercentage(updatedPlayer.getThreePointPercentage());
+        existing.setEffectiveFieldGoalPercentage(updatedPlayer.getEffectiveFieldGoalPercentage());
+        existing.setTrueShootingPercentage(updatedPlayer.getTrueShootingPercentage());
+        existing.setUsageRate(updatedPlayer.getUsageRate());
+        existing.setOffensiveRating(updatedPlayer.getOffensiveRating());
+        existing.setDefensiveRating(updatedPlayer.getDefensiveRating());
+        return playerRepository.save(existing);
+    }
+    public boolean deletePlayer(Integer id) {
+        if (playerRepository.existsById(id)) {
+            playerRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }

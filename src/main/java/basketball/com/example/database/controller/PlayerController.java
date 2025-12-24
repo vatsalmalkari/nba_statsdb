@@ -1,245 +1,159 @@
 package basketball.com.example.database.controller;
-
-import basketball.com.example.database.service.PlayerService;
 import basketball.com.example.database.model.Player;
-import basketball.com.example.database.repository.PlayerRepository;
+import basketball.com.example.database.service.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional; // Import for Optional
-
 
 @RestController
-@RequestMapping("/api/players") // All URLs start with this
+@RequestMapping("/api/players")
 public class PlayerController {
-
-    private final PlayerRepository playerRepository;
     private final PlayerService playerService;
-
-    public PlayerController(PlayerRepository playerRepository, PlayerService playerService) {
-        this.playerRepository = playerRepository;
+    public PlayerController(PlayerService playerService) {
         this.playerService = playerService;
     }
-    @Operation(summary = "Get all players", security = @SecurityRequirement(name = "JWT"))
-    // --- CRUD Operations ---
 
-    // Get all players
+    // CRUD
+    @Operation(summary = "Get all players")
     @GetMapping
-    public List<Player> getAllPlayers() {
-        return playerRepository.findAll();
+    public ResponseEntity<List<Player>> getAllPlayers() {
+        return ResponseEntity.ok(playerService.getAllPlayers());
     }
 
-    // Get a player by ID
+    @Operation(summary = "Get a player by ID")
     @GetMapping("/{id}")
     public ResponseEntity<Player> getPlayerById(@PathVariable Integer id) {
-        Optional<Player> player = playerRepository.findById(id);
-        return player.map(ResponseEntity::ok) // If player found, return 200 OK with player
-                .orElse(ResponseEntity.notFound().build()); // If not found, return 404 Not Found
-    }
-
-    // Create a new player
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Player createPlayer(@RequestBody Player player) {
-        return playerService.createPlayer(player);
-    }
-
-    // Update an existing player
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable Integer id, @RequestBody Player player) {
         try {
-            Player updated = playerService.updatePlayer(id, player);
-            return ResponseEntity.ok(updated);
-        } catch (NoSuchElementException e) {
+            return ResponseEntity.ok(playerService.getPlayerById(id));
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
-        }}
-
-    // Delete a player by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePlayer(@PathVariable Integer id) {
-        if (playerRepository.existsById(id)) {
-            playerRepository.deleteById(id);
-            return ResponseEntity.noContent().build(); // Return 204 No Content
-        } else {
-            return ResponseEntity.notFound().build(); // Return 404 Not Found
         }
     }
 
-    // --- Filter Endpoints (using methods from PlayerRepository) ---
-
-    // Get players by team
-    @GetMapping("/by-team") // New, explicit sub-path for filtering by team
-    public List<Player> getPlayersByTeam(@RequestParam String team) {
-        return playerRepository.findByTeam(team);
+    @Operation(summary = "Create a new player")
+    @PostMapping
+    public ResponseEntity<Player> createPlayer(@RequestBody Player player) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(playerService.createPlayer(player));
     }
 
-    // Get players by position
-
-    @GetMapping("/by-position") // New, explicit sub-path for filtering by position
-    public List<Player> getPlayersByPosition(@RequestParam String position) {
-        return playerRepository.findByPosition(position);
+    @Operation(summary = "Update an existing player")
+    @PutMapping("/{id}")
+    public ResponseEntity<Player> updatePlayer(
+            @PathVariable Integer id,
+            @RequestBody Player player) {
+        try {
+            return ResponseEntity.ok(playerService.updatePlayer(id, player));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Get players by age
-
-    @GetMapping("/by-age") // New, explicit sub-path for filtering by age
-    public List<Player> getPlayersByAge(@RequestParam Integer age) {
-        return playerRepository.findByAge(age);
+    @Operation(summary = "Delete a player by ID")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePlayer(@PathVariable Integer id) {
+        boolean deleted = playerService.deletePlayer(id);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    // get players by points
-    @GetMapping("by-points")
-    public List<Player> getPlayersByPoints(
-            @RequestParam Double points
-    )
-    {
-        return playerRepository.findByPointsPerGame(points);
+    @GetMapping("/team")
+    public ResponseEntity<List<Player>> getByTeam(@RequestParam String team) {
+        return ResponseEntity.ok(playerService.getPlayersByTeam(team));
     }
 
-    //get players by rebounds
-    @GetMapping("by-rebounds")
-    public List<Player> getPlayersByRebounds(
-            @RequestParam Double rebounds
-    )
-    {
-        return playerRepository.findByReboundsPerGame(rebounds);
+    @GetMapping("/name")
+    public ResponseEntity<List<Player>> getByName(@RequestParam String name) {
+        return ResponseEntity.ok(playerService.getPlayersByName(name));
     }
 
-    @GetMapping("by-steals")
-    public List<Player> getPlayersBySteals(
-            @RequestParam Double steals)
-    {
-        return playerRepository.findByStealsPerGame(steals);
+    @GetMapping("/position")
+    public ResponseEntity<List<Player>> getByPosition(@RequestParam String position) {
+        return ResponseEntity.ok(playerService.getPlayersByPosition(position));
     }
 
-    @GetMapping("by-blocks")
-    public List<Player> getPlayersByBlocks(
-            @RequestParam Double blocks
-            )
-    {
-        return playerRepository.findByBlocksPerGame(blocks);
+    @GetMapping("/age")
+    public ResponseEntity<List<Player>> getByAge(@RequestParam Integer age) {
+        return ResponseEntity.ok(playerService.getPlayersByAge(age));
     }
 
-    @GetMapping("/by-per")
-    public List<Player> getPlayersByPerRating(
-            @RequestParam Double perRating
-    )
-    {
-        return playerRepository.findByPerRating(perRating);
+    @GetMapping("/points")
+    public ResponseEntity<List<Player>> getByPoints(@RequestParam Double points) {
+        return ResponseEntity.ok(playerService.getPlayersByPoints(points));
     }
 
-    @GetMapping("/by-ws")
-    public List<Player> getPlayersByWinShares(
-            @RequestParam Double winShares
-    )
-    {
-        return playerRepository.findByWinShares(winShares);
+    @GetMapping("/rebounds")
+    public ResponseEntity<List<Player>> getByRebounds(@RequestParam Double rebounds) {
+        return ResponseEntity.ok(playerService.getPlayersByRebounds(rebounds));
     }
 
-    @GetMapping("/by-minutes")
-    public List<Player> getPlayersByMinutesPerGame(
-            @RequestParam Double minutesPerGame
-    )
-    {
-        return playerRepository.findByMinutesPerGame(minutesPerGame);
+    @GetMapping("/assists")
+    public ResponseEntity<List<Player>> getByAssists(@RequestParam Double assists) {
+        return ResponseEntity.ok(playerService.getPlayersByAssist(assists));
     }
 
-    @GetMapping("/by-gamesstarted")
-    public List<Player> getPlayersByGamesStarted(
-            @RequestParam Integer gamesStarted
-    )
-    {
-        return playerRepository.findByGamesStarted(gamesStarted);
+    @GetMapping("/steals")
+    public ResponseEntity<List<Player>> getBySteals(@RequestParam Double steals) {
+        return ResponseEntity.ok(playerService.getPlayersBySteals(steals));
     }
 
-    @GetMapping("/by-games")
-    public List<Player> getPlayersByGamesPlayed(
-            @RequestParam Integer gamesPlayed
-    )
-    {
-        return playerRepository.findByGamesPlayed(gamesPlayed);
+    @GetMapping("/blocks")
+    public ResponseEntity<List<Player>> getByBlocks(@RequestParam Double blocks) {
+        return ResponseEntity.ok(playerService.getPlayersByBlocks(blocks));
     }
 
-
-    // Get players by points per-game range - similar for rebounds, assists, steals, blocks,ft, fg, turnovers
-    @GetMapping("/filter/pointsRange") // This path was already unique, so it remains
-    public List<Player> getPlayersByPointsPerGameRange(
-            @RequestParam Double min,
-            @RequestParam Double max) {
-        return playerRepository.findByPointsPerGameBetween(min, max);
+    @GetMapping("/fg")
+    public ResponseEntity<List<Player>> getByFg(@RequestParam Double fg) {
+        return ResponseEntity.ok(playerService.getPlayersByFgPercentage(fg));
     }
 
-    // get players by assists
-    @GetMapping("by-assists")
-    public List<Player> getPlayersByAssist(
-            @RequestParam Double assist)
-            {
-        return playerRepository.findByAssistsPerGame(assist);
+    @GetMapping("/ft")
+    public ResponseEntity<List<Player>> getByFt(@RequestParam Double ft) {
+        return ResponseEntity.ok(playerService.getPlayersByFtPercentage(ft));
     }
 
-
-    @GetMapping("/filter/reboundsRange") // This path was already unique, so it remains
-    public List<Player> getPlayersByReboundsPerGameRange(
-            @RequestParam Double min,
-            @RequestParam Double max) {
-        return playerRepository.findByReboundsPerGameBetween(min, max);
+    @GetMapping("/turnovers")
+    public ResponseEntity<List<Player>> getByTurnovers(@RequestParam Double turnovers) {
+        return ResponseEntity.ok(playerService.getPlayersByTurnovers(turnovers));
     }
 
-    @GetMapping("/filter/assistsRange")
-    public List<Player>getPlayersByAssistRange(
-            @RequestParam Double min,
-            @RequestParam Double max)
-    {
-        return playerRepository.findByAssistsPerGameBetween(min,max);
+    @GetMapping("/range/points")
+    public ResponseEntity<List<Player>> getByPointsRange(@RequestParam Double min, @RequestParam Double max) {
+        return ResponseEntity.ok(playerService.getPlayersByPointsRange(min, max));
     }
 
-    @GetMapping("/filter/stealsRange")
-    public List<Player> getPlayersByStealsRange(
-            @RequestParam Double min,
-            @RequestParam Double max)
-    {
-        return playerRepository.findByStealsPerGameBetween(min,max);
+    @GetMapping("/range/rebounds")
+    public ResponseEntity<List<Player>> getByReboundsRange(@RequestParam Double min, @RequestParam Double max) {
+        return ResponseEntity.ok(playerService.getPlayersByReboundsRange(min, max));
     }
 
-    @GetMapping("/filter/blocksRange")
-    public List<Player> getPlayersByBlocksRange(
-            @RequestParam Double min,
-            @RequestParam Double max)
-    {
-        return playerRepository.findByBlocksPerGameBetween(min,max);
+    @GetMapping("/range/assists")
+    public ResponseEntity<List<Player>> getByAssistsRange(@RequestParam Double min, @RequestParam Double max) {
+        return ResponseEntity.ok(playerService.getPlayersByAssistRange(min, max));
     }
 
-    @GetMapping("/by-fgPercentRange")
-    public List <Player> getPlayersByFgPercentRange(
-            @RequestParam Double min,
-            @RequestParam Double max
-    )
-    {
-        return playerRepository.findByFgPercentageBetween(min,max);
+    @GetMapping("/range/steals")
+    public ResponseEntity<List<Player>> getByStealsRange(@RequestParam Double min, @RequestParam Double max) {
+        return ResponseEntity.ok(playerService.getPlayersByStealsRange(min, max));
     }
 
-    @GetMapping("/by-ftPercentRange")
-    public List <Player> getPlayersByFtPercentRange(
-            @RequestParam Double min,
-            @RequestParam Double max
-    )
-    {
-        return playerRepository.findByFtPercentageBetween(min,max);
+    @GetMapping("/range/blocks")
+    public ResponseEntity<List<Player>> getByBlocksRange(@RequestParam Double min, @RequestParam Double max) {
+        return ResponseEntity.ok(playerService.getPlayersByBlocksRange(min, max));
     }
 
-    @GetMapping("/by-turnoversRange")
-    public List <Player> getPlayersByTurnoversRange(
-            @RequestParam Double min,
-            @RequestParam Double max
-    )
-    {
-        return playerRepository.findByTurnoversBetween(min,max);
+    @GetMapping("/range/fg")
+    public ResponseEntity<List<Player>> getByFgRange(@RequestParam Double min, @RequestParam Double max) {
+        return ResponseEntity.ok(playerService.getPlayersByFgPercentRange(min, max));
     }
 
+    @GetMapping("/range/ft")
+    public ResponseEntity<List<Player>> getByFtRange(@RequestParam Double min, @RequestParam Double max) {
+        return ResponseEntity.ok(playerService.getPlayersByFtPercentRange(min, max));
+    }
 
+    @GetMapping("/range/turnovers")
+    public ResponseEntity<List<Player>> getByTurnoversRange(@RequestParam Double min, @RequestParam Double max) {
+        return ResponseEntity.ok(playerService.getPlayersByTurnoversRange(min, max));
+    }
 }

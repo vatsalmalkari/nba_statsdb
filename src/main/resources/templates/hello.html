@@ -1,45 +1,24 @@
-<!-- displays hello -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello World!</title>
-  <style>
-    body { font-family: 'Inter', sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; background-color: #e8f0f8; margin: 0; }
-    .container { background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px; width: 90%; }
-    h1 { color: #2980b9; margin-bottom: 25px; font-size: 2.5em; }
-    form { margin-top: 20px; }
-    input[type="submit"] {
-      padding: 12px 25px;
-      background-color: #e74c3c;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1.1em;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-    input[type="submit"]:hover {
-      background-color: #c0392b;
-      transform: translateY(-2px);
-    }
-    input[type="submit"]:active {
-      transform: translateY(0);
-    }
-  </style>
+  <title>Hello - Basketball DB</title>
+  <link th:href="@{/css/tailwind.min.css}" rel="stylesheet">
 </head>
-<body>
-<div class="container">
-  <!-- Displays the authenticated user's name -->
-  <h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
 
-  <!-- Submit a POST request to /logout -->
-  <form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
-  </form>
-</div>
+  <div class="bg-white p-10 rounded-xl shadow-lg text-center w-full max-w-md">
+    <h1 class="text-3xl font-bold text-blue-600 mb-6" th:inline="text">
+      Hello <span th:remove="tag" sec:authentication="name">User</span>!
+    </h1>
+
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="bg-red-500 text-white py-2 px-6 rounded hover:bg-red-600 transition">
+        Sign Out
+      </button>
+    </form>
+  </div>
+
 </body>
 </html>

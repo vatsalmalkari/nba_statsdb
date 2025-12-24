@@ -1,9 +1,7 @@
 package basketball.com.example.database.model;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-
 @Entity
 @Table(name = "players")
 public class Player implements Serializable {
@@ -11,21 +9,18 @@ public class Player implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @NotBlank(message = "Player name is required.")
-    @Column(name = "player_name") // maps player_name column to this variable
+    @Column(name = "player_name") 
     private String playerName;
-
+    @Column(name = "team")
     private String team;
-
     private String position;
-
     @Min(value = 18, message = "Age must be at least 18.")
     @Max(value = 50, message = "Age must be at most 50.")
     private Integer age;
 
     @Min(value = 0, message = "Games played must be 0 or more.")
-    @Column(name = "games_played") //  map column names to a variable same for all columns
+    @Column(name = "games_played") 
     private Integer gamesPlayed;
 
     @DecimalMin(value = "0.0", message = "Points per game must be >= 0.")
@@ -62,7 +57,26 @@ public class Player implements Serializable {
     @Column(name = "ft_percentage")
     private Double ftPercentage;
 
+    @Column(name = "turnovers")
     private Double turnovers;
+    @Column(name = "three_point_percentage")
+    private Double threePointPercentage;
+
+    @Column(name = "effective_field_goal_percentage")
+    private Double effectiveFieldGoalPercentage;
+
+    @Column(name = "true_shooting_percentage")
+    private Double trueShootingPercentage;
+
+    @Column(name = "usage_rate")
+    private Double usageRate;
+
+    @Column(name = "offensive_rating")
+    private Double offensiveRating;
+
+    @Column(name = "defensive_rating")
+    private Double defensiveRating;
+
 
     public Player(int i, String leBronJames, String lal, String sf, int i1, int i2, double v, double v1, double v2, double v3, double v4, double v5, double v6, double v7, int i3, double v8, double v9, double v10) {
         this.id = i;
@@ -87,9 +101,7 @@ public class Player implements Serializable {
     }
 
     public Player() {
-
     }
-
     // Getters and Setters
     public Integer getId() {
         return id;
@@ -99,11 +111,11 @@ public class Player implements Serializable {
         this.id = id;
     }
 
-    public String getPlayerName() { // Changed getter name
+    public String getPlayerName() { 
         return playerName;
     }
 
-    public void setPlayerName(String playerName) { // Changed setter name
+    public void setPlayerName(String playerName) { 
         this.playerName = playerName;
     }
 
@@ -131,100 +143,115 @@ public class Player implements Serializable {
         this.age = age;
     }
 
-    public Integer getGamesPlayed() { // Changed getter name
+    public Integer getGamesPlayed() { 
         return gamesPlayed;
     }
 
-    public void setGamesPlayed(Integer gamesPlayed) { // Changed setter name
+    public void setGamesPlayed(Integer gamesPlayed) {
         this.gamesPlayed = gamesPlayed;
     }
 
-    public Double getPointsPerGame() { // Changed getter name
+    public Double getPointsPerGame() { 
         return pointsPerGame;
     }
 
-    public void setPointsPerGame(Double pointsPerGame) { // Changed setter name
+    public void setPointsPerGame(Double pointsPerGame) { 
         this.pointsPerGame = pointsPerGame;
     }
 
-    public Double getReboundsPerGame() { // Changed getter name
+    public Double getReboundsPerGame() { 
         return reboundsPerGame;
     }
 
-    public void setReboundsPerGame(Double reboundsPerGame) { // Changed setter name
+    public void setReboundsPerGame(Double reboundsPerGame) { 
         this.reboundsPerGame = reboundsPerGame;
     }
 
-    public Double getAssistsPerGame() { // Changed getter name
+    public Double getAssistsPerGame() { 
         return assistsPerGame;
     }
 
-    public void setAssistsPerGame(Double assistsPerGame) { // Changed setter name
+    public void setAssistsPerGame(Double assistsPerGame) { 
         this.assistsPerGame = assistsPerGame;
     }
 
-    public Double getStealsPerGame() { // Changed getter name
+    public Double getStealsPerGame() { 
         return stealsPerGame;
     }
 
-    public void setStealsPerGame(Double stealsPerGame) { // Changed setter name
+    public void setStealsPerGame(Double stealsPerGame) {
         this.stealsPerGame = stealsPerGame;
     }
 
-    public Double getBlocksPerGame() { // Changed getter name
+    public Double getBlocksPerGame() { 
         return blocksPerGame;
     }
 
-    public void setBlocksPerGame(Double blocksPerGame) { // Changed setter name
+    public void setBlocksPerGame(Double blocksPerGame) { 
         this.blocksPerGame = blocksPerGame;
     }
 
-    public Double getWinShares() { // Changed getter name
+    public Double getWinShares() {
         return winShares;
     }
 
-    public void setWinShares(Double winShares) { // Changed setter name
+    public void setWinShares(Double winShares) { 
         this.winShares = winShares;
     }
 
-    public Double getMinutesPerGame() { // Changed getter name
+    public Double getMinutesPerGame() { 
         return minutesPerGame;
     }
 
-    public void setMinutesPerGame(Double minutesPerGame) { // Changed setter name
+    public void setMinutesPerGame(Double minutesPerGame) { 
         this.minutesPerGame = minutesPerGame;
     }
 
-    public Double getPerRating() { // Changed getter name
+    public Double getPerRating() {
         return perRating;
     }
 
-    public void setPerRating(Double perRating) { // Changed setter name
+    public void setPerRating(Double perRating) { 
         this.perRating = perRating;
     }
 
-    public Integer getGamesStarted() { // Changed getter name
+    public Integer getGamesStarted() {
         return gamesStarted;
     }
 
-    public void setGamesStarted(Integer gamesStarted) { // Changed setter name
+    public void setGamesStarted(Integer gamesStarted) { 
         this.gamesStarted = gamesStarted;
     }
 
-    public Double getFgPercentage() { // Changed getter name
+    public Double getFgPercentage() { 
         return fgPercentage;
     }
 
-    public void setFgPercentage(Double fgPercentage) { // Changed setter name
+    public void setFgPercentage(Double fgPercentage) { 
         this.fgPercentage = fgPercentage;
     }
 
-    public Double getFtPercentage() { // Changed getter name
+    public Double getFtPercentage() { 
         return ftPercentage;
     }
 
-    public void setFtPercentage(Double ftPercentage) { // Changed setter name
+    public void setFtPercentage(Double ftPercentage) { 
         this.ftPercentage = ftPercentage;
+    }
+
+    public Double getThreePointPercentage() {
+        return threePointPercentage;
+    }
+    public void setThreePointPercentage(Double threePointPercentage) {
+        this.threePointPercentage = threePointPercentage;
+    }
+
+    public Double getEffectiveFieldGoalPercentage() {
+        return effectiveFieldGoalPercentage;
+    }
+
+    public void setEffectiveFieldGoalPercentage(Double effectiveFieldGoalPercentage) {
+        this.effectiveFieldGoalPercentage = effectiveFieldGoalPercentage;
     }
 
     public Double getTurnovers() {
@@ -276,4 +303,33 @@ public class Player implements Serializable {
     public Double getFt_percentage() {
         return ftPercentage;
     }
+    public Double getTurnovers_per_game() {
+        return turnovers;
+    }
+    public Double getTrueShootingPercentage() {
+        return trueShootingPercentage;
+    }
+    public void setTrueShootingPercentage(Double trueShootingPercentage) {
+        this.trueShootingPercentage = trueShootingPercentage;
+    }
+    public Double getUsageRate() {
+        return usageRate;
+    }
+    public void setUsageRate(Double usageRate) {
+        this.usageRate = usageRate;
+    }
+    public Double getOffensiveRating() {
+        return offensiveRating;
+    }
+    public void setOffensiveRating(Double offensiveRating) {
+        this.offensiveRating = offensiveRating;
+    }
+    public Double getDefensiveRating() {
+        return defensiveRating;
+    }
+    public void setDefensiveRating(Double defensiveRating) {
+        this.defensiveRating = defensiveRating;
+    }
+
+    
 }
